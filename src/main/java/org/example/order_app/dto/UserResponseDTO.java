@@ -6,6 +6,9 @@ import org.example.order_app.entity.Role;
 
 import java.util.UUID;
 
+/**
+ * ДТО ответа с данными юзера
+ */
 @Data
 @Builder
 public class UserResponseDTO {
