@@ -2,8 +2,7 @@ package org.example.order_app.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
-import org.example.order_app.dto.OrderRequest;
+import org.example.order_app.dto.OrderRequestDTO;
 import org.example.order_app.dto.OrderResponseDTO;
 import org.example.order_app.entity.Order;
 import org.example.order_app.entity.OrderStatus;
@@ -25,7 +24,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
 
     @Transactional
-    public OrderResponseDTO createOrder(OrderRequest request, User user){
+    public OrderResponseDTO createOrder(OrderRequestDTO request, User user){
         Order order = Order.builder()
                 .description(request.getDescription())
                 .status(OrderStatus.CREATED)
