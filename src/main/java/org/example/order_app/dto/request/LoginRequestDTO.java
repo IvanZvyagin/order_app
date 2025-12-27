@@ -1,4 +1,4 @@
-package org.example.order_app.dto;
+package org.example.order_app.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

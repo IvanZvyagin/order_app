@@ -1,7 +1,7 @@
 package org.example.order_app.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.order_app.dto.RegisterRequestDTO;
+import org.example.order_app.dto.request.RegisterRequestDTO;
 import org.example.order_app.entity.Role;
 import org.example.order_app.entity.User;
 import org.example.order_app.repository.UserRepository;

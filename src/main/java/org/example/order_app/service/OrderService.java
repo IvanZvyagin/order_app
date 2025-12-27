@@ -2,8 +2,8 @@ package org.example.order_app.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.example.order_app.dto.OrderRequestDTO;
-import org.example.order_app.dto.OrderResponseDTO;
+import org.example.order_app.dto.request.OrderRequestDTO;
+import org.example.order_app.dto.response.OrderResponseDTO;
 import org.example.order_app.entity.Order;
 import org.example.order_app.entity.OrderStatus;
 import org.example.order_app.entity.Role;

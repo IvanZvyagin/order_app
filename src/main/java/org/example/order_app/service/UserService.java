@@ -1,7 +1,7 @@
 package org.example.order_app.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.order_app.dto.UserResponseDTO;
+import org.example.order_app.dto.response.UserResponseDTO;
 import org.example.order_app.entity.User;
 import org.example.order_app.repository.UserRepository;
 import org.springframework.stereotype.Service;
