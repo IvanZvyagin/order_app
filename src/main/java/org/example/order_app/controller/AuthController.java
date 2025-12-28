@@ -42,15 +42,16 @@ public class AuthController {
         String jwt = jwtUtils.generateJwtToken(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        List<String> roles = userDetails.getAuthorities().stream
+        List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+                .toList();
 
         return ResponseEntity.ok(JwtResponseDTO.builder()
-                .accessToken(jwt)
-                .username(userDetails.getUsername)
-                .role(roles.get(0).replace("ROLE_", ""))
+                .token(jwt)
+                .username(userDetails.getUsername())
+                .role(roles.get(0).replace("ROLE_",""))
                 .build());
     }
+
 
 }
