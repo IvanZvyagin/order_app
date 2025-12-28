@@ -2,8 +2,11 @@ package org.example.order_app.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.example.order_app.dto.request.RegisterRequestDTO;
 import org.example.order_app.dto.response.JwtResponseDTO;
 import org.example.order_app.dto.request.LoginRequestDTO;
+import org.example.order_app.dto.response.UserResponseDTO;
+import org.example.order_app.entity.User;
 import org.example.order_app.security.UserDetailsImpl;
 import org.example.order_app.service.AuthService;
 import org.example.order_app.security.JwtUtils;
@@ -50,6 +53,16 @@ public class AuthController {
                 .token(jwt)
                 .username(userDetails.getUsername())
                 .role(roles.get(0).replace("ROLE_",""))
+                .build());
+    }
+    @PostMapping("/register")
+    public ResponseEntity<UserResponseDTO> register(@Valid
+                                                    @RequestBody RegisterRequestDTO registerRequest){
+        User user = authService.registerUser(registerRequest);
+        return ResponseEntity.ok(UserResponseDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .role(user.getRole())
                 .build());
     }
 
