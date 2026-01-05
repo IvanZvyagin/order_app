@@ -12,7 +12,6 @@ import java.util.UUID;
 @Table(name = "orders")
 @Getter
 @Setter
-@RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

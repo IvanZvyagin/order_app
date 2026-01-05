@@ -3,6 +3,7 @@ package org.example.order_app.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.order_app.dto.request.OrderRequestDTO;
+import org.example.order_app.dto.request.OrderUpdateRequest;
 import org.example.order_app.dto.response.OrderResponseDTO;
 import org.example.order_app.entity.Order;
 import org.example.order_app.entity.OrderStatus;
@@ -56,6 +57,20 @@ public class OrderService {
             orderRepository.delete(order);
     }
 
+    @Transactional
+    public Page<OrderResponseDTO> getAllOrders(Pageable pageable){
+        Page<Order> orders = orderRepository.findAll(pageable);
+        return orders.map(this::convertToResponse);
+    }
+
+    @Transactional
+    public OrderResponseDTO updateOrderStatus(UUID orderId, OrderUpdateRequest request){
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(()-> new EntityNotFoundException("Заказ не найден " + orderId));
+        order.setStatus(request.getStatus());
+        Order updateOrder = orderRepository.save(order);
+            return convertToResponse(updateOrder);
+    }
 
     private OrderResponseDTO convertToResponse(Order order){
         return OrderResponseDTO.builder()

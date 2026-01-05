@@ -6,20 +6,19 @@ import org.example.order_app.dto.request.RegisterRequestDTO;
 import org.example.order_app.dto.response.JwtResponseDTO;
 import org.example.order_app.dto.request.LoginRequestDTO;
 import org.example.order_app.dto.response.UserResponseDTO;
+import org.example.order_app.entity.Role;
 import org.example.order_app.entity.User;
 import org.example.order_app.security.UserDetailsImpl;
 import org.example.order_app.service.AuthService;
 import org.example.order_app.security.JwtUtils;
+import org.mapstruct.control.MappingControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -63,6 +62,19 @@ public class AuthController {
                 .id(user.getId())
                 .username(user.getUsername())
                 .role(user.getRole())
+                .build());
+    }
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> getCurrentUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        return ResponseEntity.ok(UserResponseDTO.builder()
+                        .id(userDetails.getId())
+                        .username(userDetails.getUsername())
+                        .role(Role.valueOf(
+                                userDetails.getAuthorities().iterator().next()
+                                        .getAuthority().replace("ROLE_", "")))
                 .build());
     }
 
