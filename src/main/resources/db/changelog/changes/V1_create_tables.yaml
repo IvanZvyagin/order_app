@@ -3,6 +3,7 @@ databaseChangeLog:
       id: 1
       author: system
       changes:
+        # Создание таблицы users
         - createTable:
             tableName: users
             columns:
@@ -28,6 +29,12 @@ databaseChangeLog:
                   type: VARCHAR(20)
                   constraints:
                     nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+        # Создание таблицы orders
         - createTable:
             tableName: orders
             columns:
@@ -53,18 +60,44 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: status
-                  type: VARCHAR(50)
+                  type: VARCHAR(20)
                   constraints:
                     nullable: false
               - column:
                   name: created_at
                   type: TIMESTAMP
                   defaultValueComputed: CURRENT_TIMESTAMP
+
+        # Ограничения для таблицы users
         - addCheckConstraint:
             tableName: users
             constraintName: chk_users_role
             condition: "role IN ('USER', 'ADMIN')"
+
+        # Ограничения для таблицы orders
         - addCheckConstraint:
             tableName: orders
             constraintName: chk_orders_status
-            condition: "status IN ('CREATED', 'IN PROGRESS', 'COMPLETED'"
+            condition: "status IN ('CREATED', 'IN_PROGRESS', 'COMPLETED')"
+
+        # Индексы для улучшения производительности
+        - createIndex:
+            tableName: users
+            indexName: idx_users_username
+            columns:
+              - column:
+                  name: username
+
+        - createIndex:
+            tableName: orders
+            indexName: idx_orders_user_id
+            columns:
+              - column:
+                  name: user_id
+
+        - createIndex:
+            tableName: orders
+            indexName: idx_orders_created_at
+            columns:
+              - column:
+                  name: created_at
