@@ -14,13 +14,16 @@ services:
   app:
     build: .
     ports:
-      - "8081:8080"
+      - "8080:8080"
     depends_on:
       - postgres
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/orders_db
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin
+
+      JWT_SECRET: mySuperSecretKeyForJWT12345!@#$%
+      JWT_EXPIRATION: 86400000
 
 volumes:
   postgres_data:

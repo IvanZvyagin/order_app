@@ -68,17 +68,15 @@ databaseChangeLog:
                   type: TIMESTAMP
                   defaultValueComputed: CURRENT_TIMESTAMP
 
-        # Ограничения для таблицы users
-        - addCheckConstraint:
-            tableName: users
-            constraintName: chk_users_role
-            condition: "role IN ('USER', 'ADMIN')"
+        # Ограничения для таблицы users (через SQL)
+        - sql:
+            sql: ALTER TABLE users ADD CONSTRAINT chk_users_role CHECK (role IN ('USER', 'ADMIN'));
+            dbms: postgresql
 
-        # Ограничения для таблицы orders
-        - addCheckConstraint:
-            tableName: orders
-            constraintName: chk_orders_status
-            condition: "status IN ('CREATED', 'IN_PROGRESS', 'COMPLETED')"
+        # Ограничения для таблицы orders (через SQL)
+        - sql:
+            sql: ALTER TABLE orders ADD CONSTRAINT chk_orders_status CHECK (status IN ('CREATED', 'IN_PROGRESS', 'COMPLETED'));
+            dbms: postgresql
 
         # Индексы для улучшения производительности
         - createIndex:

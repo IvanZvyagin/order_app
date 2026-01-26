@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: system
+      changes:
+        - addColumn:
+            tableName: orders
+            columns:
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP

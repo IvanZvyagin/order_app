@@ -1,7 +1,11 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.5.7'
-	id 'io.spring.dependency-management' version '1.1.7'
+    id 'java'
+    id 'org.springframework.boot' version '3.5.7'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+ext {
+    mapstructVersion = "1.5.5.Final"
 }
 
 group = 'org.example'
@@ -9,40 +13,41 @@ version = '0.0.1-SNAPSHOT'
 description = 'order_app'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.liquibase:liquibase-core'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
-	runtimeOnly 'org.postgresql:postgresql'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	implementation group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: '3.5.7'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.hibernate:hibernate-core:6.4.0.Final'
-	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor'org.projectlombok:lombok'
-	implementation group: 'org.projectlombok', name: 'lombok-mapstruct-binding', version: '0.2.0'
-	implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.5.5.Final'
-	implementation group: 'org.mapstruct', name: 'mapstruct-processor', version: '1.5.5.Final'
-	implementation group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.2.38'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.liquibase:liquibase-core'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+    runtimeOnly 'org.postgresql:postgresql'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.hibernate:hibernate-core:6.4.0.Final'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    implementation group: 'org.projectlombok', name: 'lombok-mapstruct-binding', version: '0.2.0'
+    implementation group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.2.38'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.8.13'
+    implementation "org.mapstruct:mapstruct:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    annotationProcessor "org.projectlombok:lombok-mapstruct-binding:0.2.0"
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

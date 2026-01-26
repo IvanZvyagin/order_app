@@ -9,8 +9,7 @@ import java.util.UUID;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
-//поиск пользователя по имени
     Optional<User> findByUsername(String username);
-//проверка на существование пользователя с таким именем
+
     boolean existsByUsername(String username);
 }

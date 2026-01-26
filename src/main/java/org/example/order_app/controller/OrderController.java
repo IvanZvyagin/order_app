@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.example.order_app.dto.request.OrderRequestDTO;
 import org.example.order_app.dto.request.OrderUpdateRequest;
 import org.example.order_app.dto.response.OrderResponseDTO;
@@ -28,12 +29,10 @@ import java.util.UUID;
 @RequestMapping("/api/orders")
 @Tag(name = "Заказы", description = "API для управления заказами")
 @SecurityRequirement(name = "bearerAuth")
+@RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
 
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
 
     @PostMapping
     @Operation(summary = "Создать заказ")

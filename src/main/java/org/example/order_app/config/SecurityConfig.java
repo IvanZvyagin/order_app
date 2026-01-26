@@ -21,18 +21,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
-//Создание шифровальщика паролей
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-//создание менеджера аутентификации
+
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
-//основная конфигурация безопасности с настройкой доступов к разным эндпоинтам
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -40,10 +40,16 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(
                         SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("api/auth/**").permitAll()
-                        .requestMatchers("/swagger-ui/**").permitAll()
-                        .requestMatchers("/v3/api-docs/**").permitAll()
-                        .requestMatchers("/swagger-ui.html").permitAll()
+                        .requestMatchers(
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/api/v3/api-docs",
+                                "/api/v3/api-docs/**",
+                                "/api/swagger-ui.html",
+                                "/api/swagger-ui/**",
+                                "/api/**").permitAll()
                         .requestMatchers("/api/users/**").hasRole("ADMIN")
                         .requestMatchers("/api/orders/all").hasRole("ADMIN")
                         .anyRequest().authenticated())

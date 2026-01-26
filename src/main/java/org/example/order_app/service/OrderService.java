@@ -25,7 +25,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
 
     @Transactional
-    public OrderResponseDTO createOrder(OrderRequestDTO request, User user){
+    public OrderResponseDTO createOrder(OrderRequestDTO request, User user) {
         Order order = Order.builder()
                 .description(request.getDescription())
                 .status(OrderStatus.CREATED)
@@ -37,8 +37,7 @@ public class OrderService {
         return convertToResponse(saveOrder);
     }
 
-    @Transactional(readOnly = true)
-    public Page<OrderResponseDTO> getOrdersForCurrentUser(User user, Pageable pageable){
+    public Page<OrderResponseDTO> getOrdersForCurrentUser(User user, Pageable pageable) {
         Page<Order> orders = orderRepository.findAllByUser(user, pageable);
         return orders.map(this::convertToResponse);
     }
@@ -54,25 +53,24 @@ public class OrderService {
         if (!isOwner && !isAdmin) {
             throw new AccessDeniedException("You don't have permission to delete this order");
         }
-            orderRepository.delete(order);
+        orderRepository.delete(order);
     }
 
-    @Transactional
-    public Page<OrderResponseDTO> getAllOrders(Pageable pageable){
+    public Page<OrderResponseDTO> getAllOrders(Pageable pageable) {
         Page<Order> orders = orderRepository.findAll(pageable);
         return orders.map(this::convertToResponse);
     }
 
     @Transactional
-    public OrderResponseDTO updateOrderStatus(UUID orderId, OrderUpdateRequest request){
+    public OrderResponseDTO updateOrderStatus(UUID orderId, OrderUpdateRequest request) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(()-> new EntityNotFoundException("Заказ не найден " + orderId));
+                .orElseThrow(() -> new EntityNotFoundException("Заказ не найден " + orderId));
         order.setStatus(request.getStatus());
         Order updateOrder = orderRepository.save(order);
-            return convertToResponse(updateOrder);
+        return convertToResponse(updateOrder);
     }
 
-    private OrderResponseDTO convertToResponse(Order order){
+    private OrderResponseDTO convertToResponse(Order order) {
         return OrderResponseDTO.builder()
                 .id(order.getId())
                 .description(order.getDescription())

@@ -2,9 +2,12 @@ databaseChangeLog:
   - changeSet:
       id: 2
       author: system
+      preConditions:
+        - onFail: MARK_RAN
+          sqlCheck:
+            expectedResult: 0
+            sql: SELECT COUNT(*) FROM users WHERE username = 'admin'
       changes:
-        # Создание администратора по умолчанию
-        # Пароль: admin123 (зашифрованный BCrypt)
         - insert:
             tableName: users
             columns:

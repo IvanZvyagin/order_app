@@ -69,6 +69,3 @@ public class UserDetailsImpl implements UserDetails {
         return UserDetails.super.isEnabled();
     }
 }
-/**
- * представление данных о пользователе в формате для Spring security
- */

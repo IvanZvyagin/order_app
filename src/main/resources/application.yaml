@@ -1,1 +1,51 @@
-spring.application.name=order_app
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/orders_db
+    username: admin
+    password: admin
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    open-in-view=false:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+
+jwt:
+  secret: mySuperSecretKeyForJWT12345!@#$%
+  expiration: 86400000
+
+
+
+logging:
+  level:
+    com.example.orderservice: DEBUG
+    org.springframework.security: DEBUG
+    logging:
+      level:
+        org:
+          springframework:
+            web:
+              servlet:
+                mvc:
+                  method:
+                    annotation:
+                      RequestMappingHandlerMapping=DEBUG:

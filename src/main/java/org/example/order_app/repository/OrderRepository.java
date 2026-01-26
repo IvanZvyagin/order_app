@@ -15,10 +15,9 @@ import java.util.UUID;
  */
 @Repository
 public interface OrderRepository extends JpaRepository<Order, UUID> {
-//ищем все заказы пользователя
     List<Order> findAllByUser(User user);
-//ищем все заказы пользователя с пагинацией(сортированный вывод заказов, не сразу все а по частям)
+
     Page<Order> findAllByUser(User user, Pageable pageable);
-//ищем все заказы с пагинацией(вообще все)
+
     Page<Order> findAll(Pageable pageable);
 }

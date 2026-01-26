@@ -41,5 +41,3 @@ public class Order {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }
-
-//todo сделать колонку в БД под апдейт

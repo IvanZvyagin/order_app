@@ -9,4 +9,5 @@ public class LoginRequestDTO {
     private String username;
     @NotBlank(message = "Password is required")
     private String password;
+
 }
