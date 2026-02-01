@@ -1,0 +1,19 @@
+.build/
+.gradle/
+out/
+target/
+bin/
+*.iml
+.idea/
+.vscode/
+
+# самое важное:
+build/
+**/build/
+
+# git
+.git
+.gitignore
+
+# логи
+*.log

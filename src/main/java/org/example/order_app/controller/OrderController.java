@@ -1,7 +1,6 @@
 package org.example.order_app.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -9,11 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.example.order_app.dto.request.OrderRequestDTO;
 import org.example.order_app.dto.request.OrderUpdateRequest;
 import org.example.order_app.dto.response.OrderResponseDTO;
-import org.example.order_app.entity.Role;
-import org.example.order_app.entity.User;
 import org.example.order_app.security.UserDetailsImpl;
-import org.example.order_app.service.OrderService;
+import org.example.order_app.service.serviceImpl.OrderServiceImpl;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -31,7 +29,7 @@ import java.util.UUID;
 @SecurityRequirement(name = "bearerAuth")
 @RequiredArgsConstructor
 public class OrderController {
-    private final OrderService orderService;
+    private final OrderServiceImpl orderServiceImpl;
 
 
     @PostMapping
@@ -39,26 +37,23 @@ public class OrderController {
     public ResponseEntity<OrderResponseDTO> createOrder(
             @Valid @RequestBody OrderRequestDTO request,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        User user = User.builder()
-                .id(userDetails.getId())
-                .username(userDetails.getUsername())
-                .build();
-        OrderResponseDTO response = orderService.createOrder(request, user);
-        return ResponseEntity.ok(response);
+        if (userDetails == null) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.ok(orderServiceImpl.createOrder(request, userDetails.getId()));
     }
 
     @GetMapping
     @Operation(summary = "Получить заказы текущего пользователя")
     public ResponseEntity<Page<OrderResponseDTO>> getOrderForCurrentUser(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @Parameter(description = "Параметры пагинации")
-            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
-            Pageable pageable) {
-        User user = User.builder()
-                .id(userDetails.getId())
-                .build();
-        Page<OrderResponseDTO> orders = orderService.getOrdersForCurrentUser(user, pageable);
-        return ResponseEntity.ok(orders);
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        if (userDetails == null) {
+            return ResponseEntity.status(401).build();
+        }
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return ResponseEntity.ok(orderServiceImpl.getOrdersForCurrentUser(userDetails.getId(), pageable));
     }
 
     @GetMapping("/all")
@@ -67,7 +62,7 @@ public class OrderController {
     public ResponseEntity<Page<OrderResponseDTO>> getAllOrders(
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
             Pageable pageable) {
-        Page<OrderResponseDTO> orders = orderService.getAllOrders(pageable);
+        Page<OrderResponseDTO> orders = orderServiceImpl.getAllOrders(pageable);
         return ResponseEntity.ok(orders);
     }
 
@@ -77,21 +72,17 @@ public class OrderController {
     public ResponseEntity<OrderResponseDTO> updateOrderStatus(
             @PathVariable UUID id,
             @Valid @RequestBody OrderUpdateRequest request) {
-        OrderResponseDTO response = orderService.updateOrderStatus(id, request);
+        OrderResponseDTO response = orderServiceImpl.updateOrderStatus(id, request);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить заказ")
-    public ResponseEntity<Void> deleteOrder(
+    public ResponseEntity<OrderResponseDTO> deleteOrder(
             @PathVariable UUID id,
             @AuthenticationPrincipal UserDetailsImpl userDetails) throws AccessDeniedException {
-        User user = User.builder()
-                .id(userDetails.getId())
-                .role(Role.valueOf(userDetails.getAuthorities().iterator()
-                        .next().getAuthority().replace("ROLE_", "")))
-                .build();
-        orderService.deleteOrder(id, user);
-        return ResponseEntity.noContent().build();
+        OrderResponseDTO response = orderServiceImpl.deleteOrder(id, userDetails);
+        return ResponseEntity.ok(response);
     }
 }
+//todo Проверить работу контроллеров за Админа

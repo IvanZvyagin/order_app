@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface AuthMapper {
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "orders", ignore = true)
     @Mapping(target = "role", constant = "USER")
     User toEntity(RegisterRequestDTO requestDTO);
 }

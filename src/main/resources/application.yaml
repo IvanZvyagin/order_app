@@ -8,7 +8,7 @@ spring:
     driver-class-name: org.postgresql.Driver
 
   jpa:
-    open-in-view=false:
+    open-in-view: false
     hibernate:
       ddl-auto: validate
     show-sql: true
@@ -26,26 +26,19 @@ spring:
 server:
   port: 8080
   servlet:
-    context-path: /api
+    context-path:
 
 
 jwt:
-  secret: mySuperSecretKeyForJWT12345!@#$%
+  secret: "mySuperSecretKeyForJWT_64chars_minimum__________CHANGE_ME_1234567890"
   expiration: 86400000
 
 
 
 logging:
   level:
-    com.example.orderservice: DEBUG
-    org.springframework.security: DEBUG
-    logging:
-      level:
-        org:
-          springframework:
-            web:
-              servlet:
-                mvc:
-                  method:
-                    annotation:
-                      RequestMappingHandlerMapping=DEBUG:
+    org.example.order_app: DEBUG
+    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: DEBUG
+    RequestMappingHandlerMapping: DEBUG
+    org.hibernate.sql: DEBUG
+    org.hibernate.orm.jdbc.bind: DEBUG
