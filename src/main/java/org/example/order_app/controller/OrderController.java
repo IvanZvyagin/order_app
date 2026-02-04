@@ -60,10 +60,10 @@ public class OrderController {
     @Operation(summary = "Получение всех заказов", description = "Требуется роль ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<OrderResponseDTO>> getAllOrders(
-            @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
-            Pageable pageable) {
-        Page<OrderResponseDTO> orders = orderServiceImpl.getAllOrders(pageable);
-        return ResponseEntity.ok(orders);
+           @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        return ResponseEntity.ok(orderServiceImpl.getAllOrders(pageable));
     }
 
     @PutMapping("/{id}")
