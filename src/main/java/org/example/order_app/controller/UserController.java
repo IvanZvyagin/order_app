@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Контроллер для управления пользователями
+ */
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class UserController {
     @GetMapping
     @Operation(summary = "Получить всех пользователей", description = "Требуется роль ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<UserResponseDTO>> getAllUsers(){
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         List<UserResponseDTO> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
@@ -32,7 +35,7 @@ public class UserController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить пользователей", description = "Требуется роль ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteUser(@PathVariable UUID id){
+    public ResponseEntity<Void> deleteUser(@PathVariable UUID id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

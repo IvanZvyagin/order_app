@@ -65,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
                 .build();
     }
 
-    private void validateUsername(String username){
+    private void validateUsername(String username) {
         if (userRepository.existsByUsername(username)) {
             throw new UserIsAlreadyTakenException("Username is already taken" + username);
         }

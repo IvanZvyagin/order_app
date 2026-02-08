@@ -4,6 +4,15 @@ plugins {
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
+javadoc {
+    options.encoding = 'UTF-8'
+    options.charSet = 'UTF-8'
+    options.author = true
+    options.version = true
+    options.links("https://docs.oracle.com/en/java/javase/17/docs/api/")
+    failOnError = false
+}
+
 ext {
     mapstructVersion = "1.5.5.Final"
 }

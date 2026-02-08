@@ -31,8 +31,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponseDTO createOrder(OrderRequestDTO request, UUID uuid) {
         User user = userRepository.findById(uuid)
-                .orElseThrow(()-> new EntityNotFoundException("User not found" + uuid));
-        return orderMapper.toDto(orderRepository.save(orderMapper.toEntity(request,user)));
+                .orElseThrow(() -> new EntityNotFoundException("User not found" + uuid));
+        return orderMapper.toDto(orderRepository.save(orderMapper.toEntity(request, user)));
     }
 
     @Override

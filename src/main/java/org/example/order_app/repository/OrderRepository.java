@@ -10,9 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
-/**
- * прочитать про pageble
- */
+
 @Repository
 public interface OrderRepository extends JpaRepository<Order, UUID> {
     Page<Order> findAllByUser(User user, Pageable pageable);
