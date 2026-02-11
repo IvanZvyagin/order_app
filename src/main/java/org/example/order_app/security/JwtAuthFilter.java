@@ -22,9 +22,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthFilter extends OncePerRequestFilter {
-
-    private static final Logger logger = LoggerFactory.getLogger(JwtAuthFilter.class);
-
     private final JwtUtils jwtUtils;
     private final UserDetailsImplService userDetailsImplService;
 
@@ -57,7 +54,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            logger.error("Failed to establish authentication: {}", e.getMessage(), e);
+            logger.error("Failed to establish authentication: {}");
         }
         filterChain.doFilter(request, response);
     }

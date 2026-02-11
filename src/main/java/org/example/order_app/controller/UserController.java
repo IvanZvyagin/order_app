@@ -14,7 +14,14 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Контроллер для управления пользователями
+ * Контроллер управления пользователями.
+ * Доступен только с ролью ADMIN
+ * <p>
+ * Содержит эндпоинты для:
+ * <ul>
+ *   <li>Получения данных обо всех пользователях</li>
+ *   <li>Удаления пользователя по id</li>
+ * </ul>
  */
 @RestController
 @RequestMapping("/api/users")
@@ -24,6 +31,10 @@ import java.util.UUID;
 public class UserController {
     private final UserService userService;
 
+    /**
+     * Получение всех пользователей
+     * @return информация о зарегистрированных пользователях
+     */
     @GetMapping
     @Operation(summary = "Получить всех пользователей", description = "Требуется роль ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
@@ -32,6 +43,11 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    /**
+     * Удаление пользователя
+     * @param id предоставление id конкретного пользователя
+     * @return информация об удалении пользователя
+     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить пользователей", description = "Требуется роль ADMIN")
     @PreAuthorize("hasRole('ADMIN')")

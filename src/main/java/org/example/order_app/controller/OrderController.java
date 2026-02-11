@@ -23,7 +23,15 @@ import java.nio.file.AccessDeniedException;
 import java.util.UUID;
 
 /**
- * Контроллер для управления заказами
+ * Контроллер для управления заказами.
+ * <p>
+ * Содержит эндпоинты для:
+ * <ul>
+ *   <li>Создания нового заказа</li>
+ *   <li>Получения данных о заказах текущего пользователя(владельца заказов)</li>
+ *   <li>Обновления статуса заказа (только для роли ADMIN)</li>
+ *   <li>Удаления заказа (только для роли ADMIN или владельца заказа)</li>
+ * </ul>
  */
 @RestController
 @RequestMapping("/api/orders")
@@ -33,31 +41,43 @@ import java.util.UUID;
 public class OrderController {
     private final OrderServiceImpl orderServiceImpl;
 
-
+    /**
+     * Создание нового заказа
+     * @param request запрос на создание нового заказа с описанием
+     * @param userDetails передача информации о пользователе
+     * @return создание нового заказа с параметрами(id заказа, описание, статус, время создания, id пользователя и username)
+     */
     @PostMapping
     @Operation(summary = "Создать заказ")
     public ResponseEntity<OrderResponseDTO> createOrder(
             @Valid @RequestBody OrderRequestDTO request,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails == null) {
-            return ResponseEntity.status(401).build();
-        }
         return ResponseEntity.ok(orderServiceImpl.createOrder(request, userDetails.getId()));
     }
 
+    /**
+     *
+     * @param userDetails информация о текущем пользователе
+     * @param page начало страницы выдачи заказов
+     * @param size максимальный размер выдачи
+     * @return получение о заказах текущего пользователя
+     */
     @GetMapping
     @Operation(summary = "Получить заказы текущего пользователя")
     public ResponseEntity<Page<OrderResponseDTO>> getOrderForCurrentUser(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        if (userDetails == null) {
-            return ResponseEntity.status(401).build();
-        }
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         return ResponseEntity.ok(orderServiceImpl.getOrdersForCurrentUser(userDetails.getId(), pageable));
     }
 
+    /**
+     * Доступна только с ролью ADMIN
+     * @param page начало страницы выдачи заказов
+     * @param size максимальный размер выдачи заказов
+     * @return получение информации обо всех заказов всех пользователей
+     */
     @GetMapping("/all")
     @Operation(summary = "Получение всех заказов", description = "Требуется роль ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
@@ -68,6 +88,12 @@ public class OrderController {
         return ResponseEntity.ok(orderServiceImpl.getAllOrders(pageable));
     }
 
+    /**
+     * Доступно только с ролью ADMIN
+     * @param id запрос id конкретного заказа
+     * @param request запрос на изменение статуса заказа
+     * @return информация об изменении статуса заказа
+     */
     @PutMapping("/{id}")
     @Operation(summary = "Обновить статус заказа", description = "Требуется роль ADMIN")
     @PreAuthorize("hasRole('ADMIN')")
@@ -78,6 +104,13 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     *
+     * @param id предоставление id заказа
+     * @param userDetails предоставление информации о пользователе, который удаляет заказ
+     * @return информация об удалении заказа
+     * @throws AccessDeniedException проверка на возможность удаления заказа(владелец заказа или админ)
+     */
     @DeleteMapping("/{id}")
     @Operation(summary = "Удалить заказ")
     public ResponseEntity<OrderResponseDTO> deleteOrder(
@@ -87,4 +120,3 @@ public class OrderController {
         return ResponseEntity.ok(response);
     }
 }
-//todo Проверить работу контроллеров за Админа
