@@ -1,24 +1,18 @@
 package org.example.order_app.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.example.order_app.dto.error.ApiError;
 import org.example.order_app.dto.request.LoginRequestDTO;
 import org.example.order_app.dto.request.RegisterRequestDTO;
 import org.example.order_app.dto.response.JwtResponseDTO;
 import org.example.order_app.dto.response.UserResponseDTO;
 import org.example.order_app.security.UserDetailsImpl;
 import org.example.order_app.service.AuthService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 /**
  * Контроллер аутентификации и получения данных текущего пользователя.
